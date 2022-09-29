@@ -18,7 +18,7 @@ while true; do
     output="$localdir/~nc_input_$fileid.json"
     finaloutput="$localdir/nc_input_$fileid.json"
     
-    nc -l -p $port -w 1 > "$output" 2> _errout
+    nc -l -p $port > "$output" 2> _errout
     retval=$?
     if cat _errout|grep -q "timed out" ; then
         rm "$output"

@@ -15,18 +15,19 @@ port="$3"
 while true; do
 
     for f in $(find "$localdir" -maxdepth 1 -type f); do
-        if [ -f "$f" ]; then
 
-            case $HOST in ~*)
-                # File begins with a tilde - ignore
-                continue
-            esac
+        case $HOST in ~*)
+            # File begins with a tilde - ignore
+            continue
+        esac
 
-            echo "Transferring $f ..."
-            cat $f | nc -q 0 "$remotehost" "$port"
-            echo "Transferred $f"
-            rm "$f"
-        fi
+        echo "Transferring $f ..."
+        while ! ( cat $f | nc -q 0 "$remotehost" "$port" ); do
+            echo "Retrying"
+            sleep 0.1
+        done 
+        echo "Transferred $f"
+        rm "$f"
     done
 
     sleep 0.1

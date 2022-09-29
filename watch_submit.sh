@@ -13,15 +13,9 @@ mirroredsubdir="$2"
 remotehost="$3"
 port="$4"
 
-# Setup FIFO, connected to netcat, into which we pipe all lines
-fifofile="_watchtree_submit_fifo"
-rm $fifofile 2>/dev/null
-mkfifo $fifofile
-cat $fifofile | nc $remotehost $port &
-
 # Gather all files which should be watched
 allfiles=$(cd "$localbasedir" && find "$mirroredsubdir" -type f | tr '\n' ' ')
 echo "Watching (relative to $localbasedir): $allfiles"
 
 # Follow all files, write into FIFO
-( cd "$localbasedir" && tail -f $allfiles ) > $fifofile
+( cd "$localbasedir" && tail -f $allfiles ) | nc $remotehost $port
