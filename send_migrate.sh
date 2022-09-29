@@ -22,7 +22,8 @@ while true; do
         esac
 
         echo "Transferring $f ..."
-        while ! ( cat $f | nc -q 0 "$remotehost" "$port" ); do
+        # Transfer the filename and then the content
+        while ! ( ( basename $f ; cat $f ) | nc -q 0 "$remotehost" "$port" ); do
             echo "- retrying"
             sleep 0.1
         done

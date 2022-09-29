@@ -11,24 +11,25 @@ fi
 localdir="$1"
 port="$2"
 
-fileid=1
-
 while true; do
     
-    output="$localdir/~nc_input_$fileid.json"
-    finaloutput="$localdir/nc_input_$fileid.json"
+    initialoutput="$localdir/../~nc_input.json"
     
-    nc -l -p $port > "$output" 2> _errout
+    nc -l -p $port > "$initialoutput" 2> _errout
     retval=$?
-    if cat _errout|grep -q "timed out" ; then
-        rm "$output"
-    elif [ $retval == 0 ]; then
-        echo "Received $output"
-        mv "$output" "$finaloutput"
-        echo "Wrote to $finaloutput"
-        fileid=$((fileid+1))
+    if [ $retval == 0 ]; then
+        # First read the original file name
+        filebasename=$(head -1 "$initialoutput")
+        echo "Received $initialoutput, filename $filebasename"
+        prelimdestination="$localdir/../~$filebasename"
+        finaldestination="$localdir/$filebasename"
+        # Write the file except for its first line to the preliminary destination
+        tail -n +2 "$initialoutput" > "$prelimdestination"
+        # Move the file to its actual destination
+        mv "$prelimdestination" "$finaldestination"
+        echo "Wrote to $finaldestination"
     else
         echo "Interrupted or error"
-        exit 0
+        sleep 1
     fi
 done
