@@ -1,4 +1,4 @@
-#!/bash
+#!/bin/bash
 
 # Watches a given LOCAL directory.
 # If a new file arrives, its content is sent via netcat.

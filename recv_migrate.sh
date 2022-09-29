@@ -1,4 +1,4 @@
-#!/bash
+#!/bin/bash
 
 # Repeatedly receives files over netcat from a remote host.
 # Each arrived file is written to the given local directory.
