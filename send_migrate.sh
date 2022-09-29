@@ -23,9 +23,9 @@ while true; do
 
         echo "Transferring $f ..."
         while ! ( cat $f | nc -q 0 "$remotehost" "$port" ); do
-            echo "Retrying"
+            echo "- retrying"
             sleep 0.1
-        done 
+        done
         echo "Transferred $f"
         rm "$f"
     done
