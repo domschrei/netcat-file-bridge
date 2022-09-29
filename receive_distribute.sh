@@ -11,4 +11,4 @@ fi
 localdir="$1"
 port="$2"
 
-nc -l -p $port | awk '{sw=0} /^==>.*<==$/ {out=$2; sw=1; if (dirs[out] != 1) {print "create dir for " out; system("mkdir -p '$localdir'/$(dirname " out ")"); dirs[out] = 1}} sw==0 && $0 != "" {print $0 > "'$localdir'/"out}'
+nc -l -p $port | awk '{sw=0} /^==>.*<==$/ {out=$2; sw=1; if (dirs[out] != 1) {print "create dir for " out; system("mkdir -p '$localdir'/$(dirname " out ")"); dirs[out] = 1}} sw==0 && $0 != "" {system("echo \""$0"\" >> '$localdir'/"out)}'

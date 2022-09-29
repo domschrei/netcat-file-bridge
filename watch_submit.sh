@@ -18,4 +18,5 @@ allfiles=$(cd "$localbasedir" && find "$mirroredsubdir" -type f | tr '\n' ' ')
 echo "Watching (relative to $localbasedir): $allfiles"
 
 # Follow all files, write into FIFO
-( cd "$localbasedir" && tail -f $allfiles ) | nc $remotehost $port
+cd "$localbasedir"
+tail -f $allfiles | nc $remotehost $port
