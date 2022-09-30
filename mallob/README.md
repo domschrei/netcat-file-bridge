@@ -42,6 +42,7 @@ The collection of scripts in this directory setup these bridges for you.
 * (Launch Mallob)
 * FIRST execute `netcat-file-bridge/mallob/setup_interface_at_mallob.sh` from the base directory on machine M
 * THEN execute `netcat-file-bridge/mallob/setup_interface_at_client.sh` from the base directory on machine C
+* **Important** - After you are done, execute `netcat-file-bridge/teardown.sh` on *both* machines to kill the remaining background processes. If you do not follow this step, among other problems, subsequent connections will fail.
 
 The scripts work as follows:
 
