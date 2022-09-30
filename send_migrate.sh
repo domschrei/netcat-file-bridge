@@ -21,7 +21,7 @@ while true; do
 
     for f in $(find "$localdir" -maxdepth 1 -type f); do
 
-        case $HOST in ~*)
+        case "$f" in ~*)
             # File begins with a tilde - ignore
             continue
         esac
@@ -29,12 +29,12 @@ while true; do
         echo "Transferring $f ..."
         # Transfer the filename and then the content
         if $listen; then
-            nc_cmd="nc -l -q 0 $port"
+            nc_cmd="nc -l -q 0 -p $port"
         else
             nc_cmd="nc -q 0 $remotehost $port"
         fi
         # Transfer file via joining an existing connection
-        while ! ( ( basename $f ; cat $f ) | nc -q 0 "$remotehost" "$port" ); do
+        while ! ( ( basename $f ; cat $f ) | $nc_cmd ); do
             echo "- retrying"
             sleep 0.1
         done

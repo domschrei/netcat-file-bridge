@@ -25,7 +25,7 @@ echo "Watching (relative to $localbasedir): $allfiles"
 # Follow all files, write into FIFO
 cd "$localbasedir"
 if $listen; then
-    tail -f $allfiles | nc -l $port
+    tail -f $allfiles | nc -l -p $port
 else
     tail -f $allfiles | nc $remotehost $port
 fi

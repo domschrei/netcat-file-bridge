@@ -44,10 +44,9 @@ while true; do
         nc "$remotehost" "$port" > "$initialoutput" 2> _errout
     fi
     retval=$?
-    if [ $retval == 0 ]; then
+    if [ $retval == 0 ] && [ $(cat "$initialoutput"|wc -l) -gt 0 ]; then
         write_arrived_file "$localdir" "$initialoutput"
     else
-        echo "Interrupted or error"
-        sleep 1
+        sleep 0.1
     fi
 done
