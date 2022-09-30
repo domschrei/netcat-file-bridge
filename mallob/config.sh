@@ -1,13 +1,12 @@
 #!/bin/bash
 
-# Must be valid, addressable hosts in the current network
+# Must be a valid, addressable host in the client's network
 mallob_hostname=localhost # machine M
-client_hostname=localhost # machine C
 
-# Must be available ports on machine M / C
-port_m_jobsubmission=8901
-port_c_jobresults=8902
-port_c_logoutput=8903
+# Must be available ports on machine M and C
+port_jobsubmission=8901
+port_jobresults=8902
+port_logoutput=8903
 
 if [ $1 == client ]; then
     # Directories on machine C, relative to where the script is called from

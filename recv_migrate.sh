@@ -4,30 +4,48 @@
 # Each arrived file is written to the given local directory.
 
 if [ -z $1 ] || [ -z $2 ]; then
-    echo "Usage: [script] local-directory local-port"
+    echo "Usage: recv_migrate.sh local-directory port [hostname]"
     exit 1
 fi
 
 localdir="$1"
 port="$2"
 
+listen=true
+if ! [ -z "$3" ]; then
+    listen=false
+    remotehost="$3"
+fi
+
+function write_arrived_file() {
+    localdir="$1"
+    initialoutput="$2"
+    # First read the original file name
+    filebasename=$(head -1 "$initialoutput")
+    echo "Received $initialoutput, filename $filebasename"
+    prelimdestination="$localdir/../~$filebasename"
+    finaldestination="$localdir/$filebasename"
+    # Write the file except for its first line to the preliminary destination
+    tail -n +2 "$initialoutput" > "$prelimdestination"
+    # Move the file to its actual destination
+    mv "$prelimdestination" "$finaldestination"
+    echo "Wrote to $finaldestination"
+}
+
 while true; do
     
     initialoutput="$localdir/../~nc_input.json"
     
-    nc -l -p $port > "$initialoutput" 2> _errout
+    if $listen; then
+        # Open the connection and listen until a full file arrived
+        nc -l -p "$port" > "$initialoutput" 2> _errout
+    else
+        # Connect to an existing remote connection
+        nc "$remotehost" "$port" > "$initialoutput" 2> _errout
+    fi
     retval=$?
     if [ $retval == 0 ]; then
-        # First read the original file name
-        filebasename=$(head -1 "$initialoutput")
-        echo "Received $initialoutput, filename $filebasename"
-        prelimdestination="$localdir/../~$filebasename"
-        finaldestination="$localdir/$filebasename"
-        # Write the file except for its first line to the preliminary destination
-        tail -n +2 "$initialoutput" > "$prelimdestination"
-        # Move the file to its actual destination
-        mv "$prelimdestination" "$finaldestination"
-        echo "Wrote to $finaldestination"
+        write_arrived_file "$localdir" "$initialoutput"
     else
         echo "Interrupted or error"
         sleep 1
