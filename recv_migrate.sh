@@ -38,10 +38,10 @@ while true; do
     
     if $listen; then
         # Open the connection and listen until a full file arrived
-        nc -l -p "$port" > "$initialoutput" 2> _errout
+        nc -l -p "$port" > "$initialoutput" 2> _errout_recv
     else
         # Connect to an existing remote connection
-        nc "$remotehost" "$port" > "$initialoutput" 2> _errout
+        nc "$remotehost" "$port" > "$initialoutput" 2> _errout_recv
     fi
     retval=$?
     if [ $retval == 0 ] && [ $(cat "$initialoutput"|wc -l) -gt 0 ]; then

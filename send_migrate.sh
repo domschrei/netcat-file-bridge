@@ -34,7 +34,7 @@ while true; do
             nc_cmd="nc -q 0 $remotehost $port"
         fi
         # Transfer file via joining an existing connection
-        while ! ( ( basename $f ; cat $f ) | $nc_cmd ); do
+        while ! ( ( basename $f ; cat $f ) | $nc_cmd 2> _errout_send ); do
             echo "- retrying"
             sleep 0.1
         done
