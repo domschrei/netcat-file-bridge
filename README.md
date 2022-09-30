@@ -14,10 +14,12 @@ There are two use cases for this tool:
 
 The tool consists of the following four scripts:
 
-* `send_migrate.sh`: The **sender-side** script for **migrating files**. Provide three arguments: (1) the local directory (relative to the calling path) which should be watched, (2) the hostname of the destination machine, and (3) the port used at the destination machine.
-* `recv_migrate.sh`: The **receiver-side** script for **migrating files**. Provide two arguments: (1) the destination directory to write incoming files to, and (2) the port at which to listen.
-* `send_track.sh`: The **sender-side** script for **tracking files**. Provide four arguments: (1) the local directory (relative to the calling path) which contains the directory to listen to, (2) the subdirectory within the directory from (1) which contains the files to be followed, (3) the hostname of the destination machine, and (4) the port used at the destination machine.
-* `recv_track.sh`: The **receiver-side** script for **tracking files**. Provide two arguments: (1) the destination directory in which the tracked directory structure should be mirrored, and (2) the port at which to listen.
+* `send_migrate.sh`: The **sender-side** script for **migrating files**. Arguments: (1) the local directory (relative to the calling path) which should be watched, (2) the port to use, and optionally (3) the destination hostname at which to join a connection. If (3) is not provided, the sender opens a connection itself and the receiver needs to join it.
+* `recv_migrate.sh`: The **receiver-side** script for **migrating files**. Arguments: (1) the destination directory to write incoming files to, (2) the port to use, and optionally (3) the destination hostname at which to join a connection. If (3) is not provided, the receiver opens a connection itself and the sender needs to join it.
+* `send_track.sh`: The **sender-side** script for **tracking files**. Arguments: (1) the local directory (relative to the calling path) which contains the directory to listen to, (2) the subdirectory within the directory from (1) which contains the files to be followed, (3) the port to use, and optionally (4) the destination machine. If (4) is not provided, the sender opens a connection itself and the receiver needs to join it.
+* `recv_track.sh`: The **receiver-side** script for **tracking files**. Arguments: (1) the destination directory in which the tracked directory structure should be mirrored, (2) the port at which to listen, and optionally (3) the destination machine. If (3) is not provided, the receiver opens a connection itself and the sender needs to join it.
+
+To reiterate: If you want run a matching pair of `send_*.sh` and `recv_*.sh` on two ends, then you need to give exactly one of them the hostname of the other while omitting the hostname in the other script.
 
 ## Application
 
