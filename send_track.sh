@@ -22,10 +22,24 @@ fi
 allfiles=$(cd "$localbasedir" && find "$mirroredsubdir" -type f | tr '\n' ' ')
 echo "Watching (relative to $localbasedir): $allfiles"
 
-# Follow all files, write into FIFO
+# This function takes a number of files and prints a tail -f like
+# output for each file without providing any actual content.
+# This could be needed to properly initialize empty sender-side files 
+# on the receiver side as well.
+function introduce_all_files() {
+    files="$1"
+    for f in $files; do
+        echo "==> $f <=="
+        echo ""
+    done
+}
+
 cd "$localbasedir"
 if $listen; then
-    tail -f $allfiles | nc -l -p $port
+    nc_cmd="nc -l -p $port"
 else
-    tail -f $allfiles | nc $remotehost $port
+    nc_cmd="nc $remotehost $port"
 fi
+
+# Introduce and then follow all files, write to netcat
+( introduce_all_files "$allfiles" ; tail -f $allfiles ) | $nc_cmd
