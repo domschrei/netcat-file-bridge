@@ -5,6 +5,9 @@ set -e
 bridgebasedir="$(dirname $0)/.."
 source $bridgebasedir/mallob/config.sh mallob
 
+# Receive files for job descriptions
+$bridgebasedir/recv_migrate.sh $mallob_job_descriptions_dir $port_jobdescriptions > _mallob_log_jobdescriptions 2>&1 &
+pids="$pids $!"
 # Receive files for job submission
 $bridgebasedir/recv_migrate.sh $mallob_job_submission_dir $port_jobsubmission > _mallob_log_jobsubmission 2>&1 &
 pids="$pids $!"
@@ -15,5 +18,5 @@ pids="$pids $!"
 $bridgebasedir/send_track.sh $mallob_overall_logdir $mallob_this_run_logdir $port_logoutput > _mallob_log_logoutput 2>&1 &
 pids="$pids $!"
 
-echo "Launched subprocesses, PIDS $pids"
+echo "Launched subprocesses, PIDs $pids"
 sleep 0.5
