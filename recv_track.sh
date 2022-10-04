@@ -26,4 +26,4 @@ fi
 # Lines advertising a new file of origin ("==> FILENAME <==") are filtered
 # and the respective file is initialized, if not already done before.
 # Other non-empty lines are written to the current file of origin.
-$nc_cmd | awk '{sw=0} /^==>.*<==$/ {out=$2; sw=1; if (dirs[out] != 1) {print "create " out; system("mkdir -p '$localdir'/$(dirname " out "); touch '$localdir'/" out); dirs[out] = 1}} sw==0 && $0 != "" {system("echo \""$0"\" >> '$localdir'/"out)}'
+$nc_cmd | sed 's/"/\\"/g' | awk '{sw=0} /^==>.*<==$/ {out=$2; sw=1; if (dirs[out] != 1) {print "create " out; system("mkdir -p '$localdir'/$(dirname " out "); touch '$localdir'/" out); dirs[out] = 1}} sw==0 && $0 != "" {system("echo \""$0"\" >> '$localdir'/"out)}'
