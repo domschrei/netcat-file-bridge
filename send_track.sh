@@ -41,5 +41,7 @@ else
     nc_cmd="nc $remotehost $port"
 fi
 
-# Introduce and then follow all files, write to netcat
-( introduce_all_files "$allfiles" ; tail -f $allfiles ) | $nc_cmd
+# Introduce and then follow all files, write to netcat.
+# "-c +0" tells tail to begin at the 0th byte of each file
+# instead of beginning at the last 10 lines.
+( introduce_all_files "$allfiles" ; tail -c +0 -f $allfiles ) | $nc_cmd
