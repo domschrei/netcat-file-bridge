@@ -11,10 +11,10 @@ port_logoutput=8903
 
 if [ $1 == client ]; then
     # Directories on machine C, relative to where the script is called from
-    client_job_descriptions_dir=jobdescriptions/
-    client_job_submission_dir=jobsubmission/
-    client_job_results_dir=jobresults/
-    client_overall_logdir=logoutput/
+    client_job_descriptions_dir=descriptions/
+    client_job_submission_dir=.api/jobs.0/in/
+    client_job_results_dir=.api/jobs.0/out/
+    client_overall_logdir=./
 
     mkdir -p $client_job_descriptions_dir $client_job_submission_dir $client_job_results_dir $client_overall_logdir
 fi
@@ -25,5 +25,8 @@ if [ $1 == mallob ]; then
     mallob_job_submission_dir=.api/jobs.0/in/
     mallob_job_results_dir=.api/jobs.0/out/
     mallob_overall_logdir=logs/
-    mallob_this_run_logdir="$(ls -t $mallob_overall_logdir|head -1)/" # latest log directory
+    mallob_this_run_logdir=.api/ # latest log directory
 fi
+
+echo $mallob_this_run_logdir
+
